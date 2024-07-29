@@ -1,0 +1,3 @@
+"Acquire the Digispark ATTiny85 microcontroller board, priced at approximately ₹400, to automate code pasting in quizzes. This innovative solution enables rapid and accurate code submission, eliminating latency and ensuring high scores. With its compact design and user-friendly interface, the Digispark ATTiny85 is an ideal tool for students and professionals alike. By leveraging this technology, individuals can streamline their quiz-taking process and achieve superior results. Invest in the Digispark ATTiny85 today and unlock your full potential!"
+
+## i have searched this for every where but no use###
