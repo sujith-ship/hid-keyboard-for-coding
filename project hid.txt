@@ -1,0 +1,140 @@
+#include <DigiKeyboard.h>
+#include <avr/pgmspace.h>
+
+#define KEY_TAB 0x09
+#define KEY_EQUAL 0x1D
+#define KEY_SEMICOLON 0x3B
+
+void typeString(const char *str, int charDelay) {
+  while (*str) {
+    if (*str == ' ') {
+      DigiKeyboard.sendKeyStroke(KEY_SPACE);
+    } else if (*str == '<') {
+      DigiKeyboard.sendKeyStroke(0x36, MOD_SHIFT_RIGHT); // Key code for '<'
+    } else if (*str == '.') {
+      DigiKeyboard.sendKeyStroke(0x37); // Key code for '.'
+    } else if (*str == ',') {
+      DigiKeyboard.sendKeyStroke(0x36); // Key code for ','
+    } else if (*str == '>') {
+      DigiKeyboard.sendKeyStroke(0x37, MOD_SHIFT_RIGHT); // Key code for '>'
+    } else if (*str == ')') {
+      DigiKeyboard.sendKeyStroke(0x27, MOD_SHIFT_RIGHT); // Key code for ')'
+    } else if (*str == '(') {
+      DigiKeyboard.sendKeyStroke(0x26, MOD_SHIFT_RIGHT); // Key code for '('
+    } else if (*str == '{') {
+      DigiKeyboard.sendKeyStroke(0x2F, MOD_SHIFT_RIGHT); // Key code for '{'
+    } else if (*str == '}') {
+      DigiKeyboard.sendKeyStroke(0x30, MOD_SHIFT_RIGHT); // Key code for '}'
+    } else if (*str == '[') {
+      DigiKeyboard.sendKeyStroke(0x2F); // Key code for '['
+    } else if (*str == '=') {
+      DigiKeyboard.sendKeyStroke(KEY_EQUAL); // Key code for '='
+    } else if (*str == ';') {
+      DigiKeyboard.sendKeyStroke(KEY_SEMICOLON); // Key code for ';'
+    } else if (*str == ']') {
+      DigiKeyboard.sendKeyStroke(0x30); // Key code for ']'
+    } else if (*str == '1') {
+      DigiKeyboard.sendKeyStroke(0x1E); // Key code for '1'
+    } else if (*str == '2') {
+      DigiKeyboard.sendKeyStroke(0x1F); // Key code for '2'
+    } else if (*str == '3') {
+      DigiKeyboard.sendKeyStroke(0x20); // Key code for '3'
+    } else if (*str == '4') {
+      DigiKeyboard.sendKeyStroke(0x21); // Key code for '4'
+    } else if (*str == '5') {
+      DigiKeyboard.sendKeyStroke(0x22); // Key code for '5'
+    } else if (*str == '6') {
+      DigiKeyboard.sendKeyStroke(0x23); // Key code for '6'
+    } else if (*str == '7') {
+      DigiKeyboard.sendKeyStroke(0x24); // Key code for '7'
+    } else if (*str == '8') {
+      DigiKeyboard.sendKeyStroke(0x25); // Key code for '8'
+    } else if (*str == '9') {
+      DigiKeyboard.sendKeyStroke(0x26); // Key code for '9'
+    } else if (*str == '0') {
+      DigiKeyboard.sendKeyStroke(0x27); // Key code for '0'
+    } else if (*str == '*') {
+      DigiKeyboard.sendKeyStroke(0x2A, MOD_SHIFT_RIGHT); // Key code for '*'
+    } else if (*str == '-') {
+      DigiKeyboard.sendKeyStroke(0x2D); // Key code for '-'
+    } else if (*str == '+') {
+      DigiKeyboard.sendKeyStroke(0x2E, MOD_SHIFT_RIGHT); // Key code for '+'
+    } else if (*str == '/') {
+      DigiKeyboard.sendKeyStroke(0x38); // Key code for '/'
+    } else if (*str == '\n') {
+      DigiKeyboard.sendKeyStroke(KEY_ENTER); // For new line
+    } else if (*str == '\t') {
+      DigiKeyboard.sendKeyStroke(KEY_TAB); // For tab
+    } else if (*str >= 'a' && *str <= 'z') {
+      DigiKeyboard.sendKeyStroke(*str - 'a' + KEY_A); // Key codes for 'a' to 'z'
+    } else if (*str >= 'A' && *str <= 'Z') {
+      DigiKeyboard.sendKeyStroke(*str - 'A' + KEY_A, MOD_SHIFT_RIGHT); // Key codes for 'A' to 'Z'
+    } else {
+      DigiKeyboard.print(*str); // Default for other characters
+    }
+    str++;
+    DigiKeyboard.delay(charDelay);
+  }
+}
+
+// Store the large string in PROGMEM
+const char PROGMEM javaCode[] =
+  "import java.util.*;\n\n"
+  "class Main {\n    ####example code##### "
+  "    public static void main(String args[]) {\n"
+  "        Scanner sc = new Scanner(System.in);\n"
+  "        int t = sc.nextInt();\n"
+  "        sc.nextLine();\n\n"
+  "        for (int i = 0; i < t; i++) {\n"
+  "            String input = sc.nextLine();\n"
+  "            System.out.println(firstNonRepeating(input));\n"
+  "        }\n\n"
+  "        sc.close();\n"
+  "    }\n\n"
+  "    public static String firstNonRepeating(String A) {\n"
+  "        int[] count = new int[26];\n"
+  "        Queue<Character> queue = new LinkedList<>();\n"
+  "        StringBuilder result = new StringBuilder();\n\n"
+  "        for (char ch : A.toCharArray()) {\n"
+  "            int index = ch - 'a';\n"
+  "            count[index]++;\n"
+  "            queue.add(ch);\n\n"
+  "            while (!queue.isEmpty() && count[queue.peek() - 'a'] > 1) {\n"
+  "                queue.poll();\n"
+  "            }\n\n"
+  "            if (queue.isEmpty()) {\n"
+  "                result.append('*');\n"
+  "            } else {\n"
+  "                result.append(queue.peek());\n"
+  "            }\n"
+  "        }\n\n"
+  "        return result.toString();\n"
+  "    }\n"
+  "}\n";
+
+void setup() {
+  DigiKeyboard.delay(3000); // Wait for 3 seconds before starting
+
+  int charDelay = 60000 / 500; // Typing speed to 500 characters per minute
+  char buffer[200]; // Increased buffer size
+  uint16_t index = 0;
+
+  while (true) {
+    char c = pgm_read_byte(&(javaCode[index]));
+    if (c == '\0') break;
+
+    buffer[index % (sizeof(buffer) - 1)] = c; // Place character into buffer
+    if (c == '\n' || (index % (sizeof(buffer) - 1)) == (sizeof(buffer) - 2)) {
+      buffer[(index % (sizeof(buffer) - 1)) + 1] = '\0'; // Null terminate the buffer
+      typeString(buffer, charDelay); // Type out the buffer
+      // Clear the buffer and reset index if buffer is full
+      memset(buffer, 0, sizeof(buffer));
+    }
+
+    index++;
+  }
+}
+
+void loop() {
+  // Empty loop
+}
